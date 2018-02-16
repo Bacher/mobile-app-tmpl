@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import './App.css';
+import SidePanel from './SidePanel';
+import SideMenu from './SideMenu';
 import Notifications from './Notifications';
+import Filters from './Notifications';
 
 export default class App extends Component {
 
@@ -19,7 +22,9 @@ export default class App extends Component {
             '_onTouchStart',
             '_onTouchEnd',
             '_onTouchMove',
+            '_onSideMenuClick',
             '_onNotificationsClick',
+            '_onFiltersClick',
         ]);
     }
 
@@ -32,12 +37,12 @@ export default class App extends Component {
             <div className="app">
                 <div className="header">
                     <div className="header-part">
-                        <div className="button"></div>
-                        <div className="button"></div>
+                        <div className="button" onClick={this._onSideMenuClick}>M</div>
+                        <div className="button" onClick={this._onFiltersClick}>F</div>
                     </div>
                     <div className="header-part">
                         <div className="button"></div>
-                        <div className="button" onClick={this._onNotificationsClick}></div>
+                        <div className="button" onClick={this._onNotificationsClick}>N</div>
                     </div>
                 </div>
                 <div className="board-wrapper" ref="boardWrapper">
@@ -45,7 +50,9 @@ export default class App extends Component {
                         <div className="column">
                             <div className="column-header">Идея</div>
                             <div className="task"></div>
-                            <div className="task"></div>
+                            <a href="//yandex.ru">
+                                <div className="task"></div>
+                            </a>
                             <div className="task"></div>
                             <div className="task"></div>
                             <div className="task"></div>
@@ -78,7 +85,15 @@ export default class App extends Component {
                         </div>
                     </div>
                 </div>
-                <Notifications ref="notifications" />
+                <SidePanel ref="sideMenu">
+                    <SideMenu />
+                </SidePanel>
+                <SidePanel ref="filters" style={{ width: '80%' }}>
+                    <Filters />
+                </SidePanel>
+                <SidePanel ref="notifications" right style={{ width: '80%' }}>
+                    <Notifications />
+                </SidePanel>
             </div>
         );
     }
@@ -119,6 +134,8 @@ export default class App extends Component {
     }
 
     _onTouchMove(e) {
+        console.log('move');
+
         const touch = {
             x: e.touches[0].clientX,
             y: e.touches[0].clientY,
@@ -152,6 +169,12 @@ export default class App extends Component {
     }
 
     _onTouchEnd(e) {
+        if (!this._lastMoveTs) {
+            return;
+        }
+
+        console.log('end');
+
         e.preventDefault();
 
         const startShift = this._shift;
@@ -214,6 +237,14 @@ export default class App extends Component {
 
     _onNotificationsClick() {
         this.refs.notifications.show();
+    }
+
+    _onFiltersClick() {
+        this.refs.filters.show();
+    }
+
+    _onSideMenuClick() {
+        this.refs.sideMenu.show();
     }
 
 }

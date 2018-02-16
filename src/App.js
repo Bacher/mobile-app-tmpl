@@ -134,8 +134,6 @@ export default class App extends Component {
     }
 
     _onTouchMove(e) {
-        console.log('move');
-
         const touch = {
             x: e.touches[0].clientX,
             y: e.touches[0].clientY,
@@ -172,8 +170,6 @@ export default class App extends Component {
         if (!this._lastMoveTs) {
             return;
         }
-
-        console.log('end');
 
         e.preventDefault();
 
